@@ -1,5 +1,5 @@
 import { setupManifest } from '@start9labs/start-sdk'
-import { alerts, long, short } from './i18n'
+import { long, short } from './i18n'
 
 export const manifest = setupManifest({
   id: 'nitter',
@@ -27,13 +27,4 @@ export const manifest = setupManifest({
       arch: ['x86_64', 'aarch64'],
     },
   },
-  alerts: {
-    install: alerts.install,
-    update: null,
-    uninstall: null,
-    restore: null,
-    start: null,
-    stop: null,
-  },
-  dependencies: {},
 })

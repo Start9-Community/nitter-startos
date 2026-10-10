@@ -9,7 +9,7 @@ import { sdk } from '../sdk'
  * library.
  */
 
-const serverShape = z.object({
+const serverShape = z.looseObject({
   // empty until the primary URL watcher seeds it on first init
   hostname: z.string().catch(''),
   title: z.string().catch('Nitter'),
@@ -20,7 +20,7 @@ const serverShape = z.object({
   staticDir: z.literal('./public').catch('./public'),
 })
 
-const cacheShape = z.object({
+const cacheShape = z.looseObject({
   listMinutes: z.number().catch(240),
   rssMinutes: z.number().catch(10),
   redisHost: z.literal('localhost').catch('localhost'),
@@ -29,7 +29,7 @@ const cacheShape = z.object({
   redisMaxConnections: z.number().catch(30),
 })
 
-const configShape = z.object({
+const configShape = z.looseObject({
   hmacKey: z
     .string()
     .catch(utils.getDefaultString({ charset: 'a-z,0-9', len: 32 })),
@@ -42,7 +42,7 @@ const configShape = z.object({
   retryDelayMs: z.number().catch(150),
 })
 
-const shape = z.object({
+const shape = z.looseObject({
   Server: serverShape.catch(() => serverShape.parse({})),
   Cache: cacheShape.catch(() => cacheShape.parse({})),
   Config: configShape.catch(() => configShape.parse({})),
@@ -50,7 +50,7 @@ const shape = z.object({
 
 export type NitterConf = z.infer<typeof shape>
 
-function serializeValue(value: string | number | boolean): string {
+function serializeValue(value: unknown): string {
   if (typeof value === 'string')
     return `"${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
   return String(value)
@@ -62,7 +62,7 @@ function toFile(data: NitterConf): string {
       .map(
         ([section, kvs]) =>
           `[${section}]\n` +
-          Object.entries(kvs)
+          Object.entries(kvs as Record<string, unknown>)
             .map(([key, value]) => `${key} = ${serializeValue(value)}`)
             .join('\n'),
       )

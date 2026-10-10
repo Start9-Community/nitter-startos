@@ -8,13 +8,13 @@ import { sdk } from '../sdk'
  * password into the Caddyfile at startup).
  */
 
-const basicAuthShape = z.object({
+const basicAuthShape = z.looseObject({
   enabled: z.boolean().catch(false),
   username: z.string().nullable().catch(null),
   password: z.string().nullable().catch(null),
 })
 
-const shape = z.object({
+const shape = z.looseObject({
   basicAuth: basicAuthShape.catch(() => basicAuthShape.parse({})),
 })
 
