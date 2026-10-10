@@ -7,7 +7,7 @@ import { sdk } from '../sdk'
  * startup (one {"kind":"cookie",...} object per line).
  */
 
-const sessionShape = z.object({
+const sessionShape = z.looseObject({
   auth_token: z.string(),
   ct0: z.string(),
   username: z.string().optional(),
@@ -15,7 +15,7 @@ const sessionShape = z.object({
 
 export type Session = z.infer<typeof sessionShape>
 
-const shape = z.object({
+const shape = z.looseObject({
   sessions: z.array(sessionShape).catch([]),
 })
 

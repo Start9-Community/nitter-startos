@@ -18,18 +18,3 @@ export const long = {
   fr_FR:
     "Nitter est une interface légère et sans JavaScript pour X (Twitter). Parcourez les profils, les tweets et les recherches sans publicité ni pistage, et abonnez-vous aux comptes via RSS. Nécessite les cookies de session d'un vrai compte X pour récupérer les données.",
 }
-
-export const alerts = {
-  install: {
-    en_US:
-      'Nitter requires session cookies from a real X (Twitter) account to fetch data. After installation, complete the "Add X Account Session" action before the service can start. A burner account is strongly recommended — X may restrict accounts used for scraping.',
-    es_ES:
-      'Nitter requiere cookies de sesión de una cuenta real de X (Twitter) para obtener datos. Tras la instalación, completa la acción "Añadir sesión de cuenta de X" antes de que el servicio pueda iniciarse. Se recomienda encarecidamente una cuenta desechable: X puede restringir las cuentas utilizadas para scraping.',
-    de_DE:
-      'Nitter benötigt Sitzungs-Cookies eines echten X-Kontos (Twitter), um Daten abzurufen. Führe nach der Installation die Aktion „X-Konto-Sitzung hinzufügen" aus, bevor der Dienst starten kann. Ein Wegwerf-Konto wird dringend empfohlen — X kann Konten einschränken, die zum Scraping verwendet werden.',
-    pl_PL:
-      'Nitter wymaga ciasteczek sesji prawdziwego konta X (Twittera) do pobierania danych. Po instalacji wykonaj akcję „Dodaj sesję konta X", zanim usługa będzie mogła się uruchomić. Zdecydowanie zalecane jest konto jednorazowe — X może ograniczać konta używane do scrapingu.',
-    fr_FR:
-      "Nitter nécessite les cookies de session d'un vrai compte X (Twitter) pour récupérer les données. Après l'installation, effectuez l'action « Ajouter une session de compte X » avant que le service puisse démarrer. Un compte jetable est fortement recommandé — X peut restreindre les comptes utilisés pour le scraping.",
-  },
-}

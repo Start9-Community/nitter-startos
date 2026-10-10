@@ -21,8 +21,6 @@ export const main = sdk.setupMain(async ({ effects }) => {
     (await sessionsJson.read((s) => s.sessions).const(effects)) || []
   const basicAuth = await storeJson.read((s) => s.basicAuth).const(effects)
 
-  // 2.0: SubContainer.of() is lazy and synchronous — it materializes on first
-  // use (rootfs/exec), so no await here.
   const valkeySub = sdk.SubContainer.of(
     effects,
     { imageId: 'valkey' },

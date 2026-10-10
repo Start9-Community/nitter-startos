@@ -1,12 +1,12 @@
 import { sdk } from '../sdk'
-import { setDependencies } from '../dependencies'
+import { dependencies } from '../dependencies'
 import { setInterfaces } from '../interfaces'
 import { versionGraph } from '../versions'
 import { actions } from '../actions'
 import { restoreInit } from '../backups'
 import { seedFiles } from './seedFiles'
 import { taskSessions } from './taskSessions'
-import { taskPrimaryUrl } from './taskPrimaryUrl'
+import { syncPrimaryUrl, taskPrimaryUrl } from './taskPrimaryUrl'
 import { taskBasicAuth } from './taskBasicAuth'
 
 export const init = sdk.setupInit(
@@ -14,9 +14,10 @@ export const init = sdk.setupInit(
   versionGraph,
   seedFiles,
   setInterfaces,
-  setDependencies,
   actions,
+  dependencies,
   taskSessions,
+  syncPrimaryUrl,
   taskPrimaryUrl,
   taskBasicAuth,
 )

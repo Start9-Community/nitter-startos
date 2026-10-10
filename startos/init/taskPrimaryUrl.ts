@@ -1,38 +1,33 @@
-import { setPrimaryUrl } from '../actions/setPrimaryUrl'
-import { nitterConf } from '../fileModels/nitter.conf'
+import {
+  primaryUrl,
+  readPrimaryUrl,
+  writePrimaryUrl,
+} from '../actions/setPrimaryUrl'
 import { i18n } from '../i18n'
 import { sdk } from '../sdk'
 import { getNonLocalUrls } from '../utils'
 
-export const taskPrimaryUrl = sdk.setupOnInit(async (effects) => {
-  const availableUrls = await getNonLocalUrls(effects)
-  const server = await nitterConf.read((c) => c.Server).const(effects)
-  const url = server?.hostname
-    ? `${server.https ? 'https' : 'http'}://${server.hostname}`
-    : null
-
-  if (!url) {
-    const defaultUrl =
-      availableUrls.find((u) => u.includes('.local')) || availableUrls[0]
-    if (defaultUrl) {
-      const parsed = new URL(defaultUrl)
-      await nitterConf.merge(
-        effects,
-        {
-          Server: {
-            hostname: parsed.host,
-            https: parsed.protocol === 'https:',
-          },
-        },
-        { allowWriteAfterConst: true },
+export const syncPrimaryUrl = sdk.setupOnInit(async (effects) => {
+  const stored = await readPrimaryUrl.const(effects)
+  const url = stored
+    ? // fallback: false makes this the stored URL at its host's current port and scheme, or null
+      await primaryUrl.bestUsable(effects).const()
+    : await getNonLocalUrls(effects).then(
+        (urls) =>
+          urls.find((u) => new URL(u).hostname.endsWith('.local')) ?? urls[0],
       )
-    }
-  } else if (availableUrls.includes(url)) {
-    await sdk.action.clearTask(effects, 'nitter:set-primary-url')
-  } else if (availableUrls.length) {
-    // an empty list means the addresses aren't known yet, not that the URL is gone
-    await sdk.action.createOwnTask(effects, setPrimaryUrl, 'critical', {
-      reason: i18n('Primary URL removed. Select a new primary URL.'),
-    })
+  if (url && url !== stored) {
+    await writePrimaryUrl(effects, url, { allowWriteAfterConst: true })
+  }
+})
+
+const primaryUrlTask = primaryUrl.setupTask('critical', {
+  reason: i18n('Primary URL removed. Select a new primary URL.'),
+})
+
+export const taskPrimaryUrl = sdk.setupOnInit(async (effects, kind) => {
+  // an empty list means the addresses aren't known yet, not that the URL is gone
+  if ((await getNonLocalUrls(effects)).length) {
+    await primaryUrlTask.init(effects, kind)
   }
 })
