@@ -32,12 +32,12 @@ Nitter is a lightweight, JavaScript-free front-end for X (Twitter) — browse pr
 
 ## Image and Container Runtime
 
-Three images run together: the upstream Nitter image unmodified, a Valkey cache, and a Caddy reverse proxy. All three are published upstream and pinned by tag in the manifest; none is rebuilt from a local Dockerfile.
+Three images run together: the upstream Nitter image, a Valkey cache, and a Caddy reverse proxy, all published upstream and pinned by tag in the manifest. The Nitter image has its CA store upgraded by the root `Dockerfile`, a temporary layer that comes out once upstream ships an image built on a fixed store.
 
-| Property      | Value                                                            |
-| ------------- | --------------------------------------------------------------- |
-| Images        | `zedeus/nitter` (unmodified), `valkey/valkey`, `caddy`          |
-| Architectures | x86_64, aarch64                                                 |
+| Property      | Value                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| Images        | `zedeus/nitter` (CA store upgraded), `valkey/valkey`, `caddy`                               |
+| Architectures | x86_64, aarch64                                                                             |
 | Entrypoint    | Nitter runs its default `./nitter` from `/src`; Valkey and Caddy run their default binaries |
 
 The package runs three subcontainers — `nitter-sub`, `valkey-sub`, and `caddy-sub` — started in that dependency order (Valkey, then Nitter, then Caddy). Attach to one with `start-cli package attach nitter -n <subcontainer-name>`. Caddy owns the exposed port and proxies to Nitter, which listens only inside the pod; Valkey is Nitter's cache. Nitter is pointed at its config and session files on the `main` volume through the `NITTER_CONF_FILE` and `NITTER_SESSIONS_FILE` environment variables rather than the image's baked-in defaults.
@@ -49,7 +49,7 @@ The package runs three subcontainers — `nitter-sub`, `valkey-sub`, and `caddy-
 A single volume, `main`, holds everything that persists; it is mounted into the Nitter subcontainer at `/data`. The Valkey and Caddy subcontainers mount no volume — the cache is deliberately ephemeral and the Caddyfile is regenerated on every start.
 
 | Volume | Mount Point | Contents                                                       |
-| ------ | ----------- | ------------------------------------------------------------- |
+| ------ | ----------- | -------------------------------------------------------------- |
 | `main` | `/data`     | `nitter.conf`, `sessions.json`, `sessions.jsonl`, `store.json` |
 
 ---
@@ -75,9 +75,9 @@ None. Nitter needs an X account session (supplied through an action), not anothe
 
 One interface, served by Caddy.
 
-| Interface | ID   | Type | Port | Protocol | Purpose                    |
-| --------- | ---- | ---- | ---- | -------- | -------------------------- |
-| Web UI    | `ui` | ui   | 80   | HTTP     | The Nitter web interface   |
+| Interface | ID   | Type | Port | Protocol | Purpose                  |
+| --------- | ---- | ---- | ---- | -------- | ------------------------ |
+| Web UI    | `ui` | ui   | 80   | HTTP     | The Nitter web interface |
 
 Caddy listens on port 80 and reverse-proxies to Nitter on its internal port; when Basic Auth is enabled, Caddy enforces it here before proxying. Nitter's own port is never exposed as an interface.
 
@@ -122,9 +122,9 @@ The package raises three tasks. The first two block or gate the service; the thi
 
 One health check is surfaced.
 
-| Check         | Probes                         | What a failure means                                                                 |
-| ------------- | ------------------------------ | ------------------------------------------------------------------------------------ |
-| Web Interface | Nitter listening on port 8080  | Still starting, or Nitter exited — most often because no valid session is configured |
+| Check         | Probes                        | What a failure means                                                                 |
+| ------------- | ----------------------------- | ------------------------------------------------------------------------------------ |
+| Web Interface | Nitter listening on port 8080 | Still starting, or Nitter exited — most often because no valid session is configured |
 
 The Valkey and Caddy daemons carry readiness probes too (Valkey answers `PING`; Caddy listens on port 80), but these have no display and are not shown; they only gate the startup order.
 

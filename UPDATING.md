@@ -17,7 +17,7 @@ Pick the newest full-commit-hash tag (do not pin `latest` — it moves). Confirm
 
 ## Applying the bump
 
-1. Bump `dockerTag` in `startos/manifest/index.ts` to `zedeus/nitter:<commit hash>`.
+1. Set the `IMAGE` build arg of `images.nitter.source.dockerBuild` in `startos/manifest/index.ts` to `zedeus/nitter:<commit hash>`.
 2. Update `version` in `startos/versions/current.ts` to the commit date (`YYYY.M.D:0`) and update the release notes (mention the short commit hash and date).
 3. Check the upstream diff for changes to `nitter.example.conf` or `src/config.nim` — new/removed config keys must be reflected in `startos/fileModels/nitter.conf.ts`.
 4. Check `src/auth.nim` and the [session tokens wiki page](https://github.com/zedeus/nitter/wiki/Creating-session-tokens) for changes to the `sessions.jsonl` format (currently `{"kind":"cookie","auth_token":...,"ct0":...}` per line) — the add-session action and `main.ts` renderer must match.
