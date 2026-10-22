@@ -14,7 +14,11 @@ export const manifest = setupManifest({
   images: {
     nitter: {
       source: {
-        dockerTag: 'zedeus/nitter:8142bab1a920d13589ab5e689d7623ac0ac7ec34',
+        dockerBuild: {
+          buildArgs: {
+            IMAGE: 'zedeus/nitter:8142bab1a920d13589ab5e689d7623ac0ac7ec34',
+          },
+        },
       },
       arch: ['x86_64', 'aarch64'],
     },
