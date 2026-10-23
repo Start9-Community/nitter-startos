@@ -1,8 +1,12 @@
+import { createHash } from 'crypto'
 import { i18n } from '../i18n'
 import { sdk } from '../sdk'
 import { sessionsJson } from '../fileModels/sessions.json'
 
 const { InputSpec, Value } = sdk
+
+const sessionKey = (authToken: string) =>
+  createHash('sha256').update(authToken).digest('hex').slice(0, 16)
 
 export const inputSpec = InputSpec.of({
   sessions: Value.dynamicMultiselect(async ({ effects }) => {
@@ -10,12 +14,14 @@ export const inputSpec = InputSpec.of({
     return {
       name: i18n('Sessions to remove'),
       description: i18n(
-        'Sessions are labeled by username when provided, otherwise by the first characters of their auth_token.',
+        'Sessions are labeled by username when provided, otherwise by their position in the list.',
       ),
       values: Object.fromEntries(
-        sessions.map((s) => [
-          s.auth_token,
-          s.username ? `@${s.username}` : `${s.auth_token.slice(0, 8)}…`,
+        sessions.map((s, i) => [
+          sessionKey(s.auth_token),
+          s.username
+            ? `@${s.username}`
+            : i18n('Session ${number}', { number: i + 1 }),
         ]),
       ),
       default: [],
@@ -49,7 +55,7 @@ export const removeSessions = sdk.Action.withInput(
   async ({ effects, input }) => {
     const existing = (await sessionsJson.read((s) => s.sessions).once()) || []
     const remaining = existing.filter(
-      (s) => !input.sessions.includes(s.auth_token),
+      (s) => !input.sessions.includes(sessionKey(s.auth_token)),
     )
     await sessionsJson.write(effects, { sessions: remaining })
 
