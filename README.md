@@ -32,7 +32,7 @@ Nitter is a lightweight, JavaScript-free front-end for X (Twitter) — browse pr
 
 ## Image and Container Runtime
 
-Two images run together: the upstream Nitter image and a Valkey cache, both published upstream and pinned by tag in the manifest. The Nitter image has its CA store upgraded by the root `Dockerfile`, a temporary layer that comes out once upstream ships an image built on a fixed store.
+Two images run together: the upstream Nitter image and a Valkey cache, both published upstream and pinned by tag in the manifest. The Nitter image has its CA store upgraded by the root `Dockerfile`.
 
 | Property      | Value                                                                       |
 | ------------- | --------------------------------------------------------------------------- |
@@ -64,9 +64,7 @@ The package manages four files on the `main` volume. Three are typed file models
   - `access`: `private` or `public`, written by **Manage Access**. Unset until the owner chooses, which is what raises the Manage Access task (see [Tasks](#tasks)).
   - `password`: the login password, in plaintext because StartOS's reverse proxy checks the login against it. Only Manage Access writes it, and it is kept when Nitter is made public, so making it private again can reuse it.
   - `primaryUrl`: the URL chosen in **Set Primary URL**.
-  - `reattachTorOnions`: set by the update that moved the Web UI from port 80 to 8080 when the old binding existed, and cleared once Tor has moved its `.onion` addresses to the new one.
-
-  A server updated from a release that used Basic Auth starts with `access: private` and the same password if Basic Auth was on, and `access: public` otherwise, with `primaryUrl` copied from `nitter.conf`.
+  - `reattachTorOnions`: set while Tor still has to move the Web UI's `.onion` addresses from a retired port binding to port 8080, and cleared once it has.
 
 - **`sessions.jsonl`** — not a model. Rendered from `sessions.json` into the file Nitter actually reads (`NITTER_SESSIONS_FILE`) on every start, one `{"kind":"cookie",…}` object per line. A hand edit is overwritten each start.
 
@@ -99,7 +97,7 @@ Nitter has no upstream setup wizard; StartOS does the first-run setup through in
 3. A **critical** task requires **Manage Access** before the service can start, with Private pre-selected, so Nitter never runs before the owner has chosen whether it asks for a login.
 4. An **important** task asks for **Set Primary URL**, pre-filled with the preferred address, which Nitter links to until a URL is chosen.
 
-See [Tasks](#tasks). A server updated from an earlier release keeps its access choice (see `store.json` in [File Models](#file-models)) and gets only the tasks its state calls for. That update also moves the Web UI from port 80 to 8080, so its addresses on the local network can change port; Tor moves the interface's `.onion` addresses over, keeping each hostname, once a Tor release that allows it is installed.
+See [Tasks](#tasks).
 
 ---
 
@@ -119,7 +117,7 @@ All actions are available in any service status, and all are user-facing. Sessio
 The package raises three tasks. A critical task blocks startup and suspends the ordinary controls until it is satisfied; an important one doesn't.
 
 - **Add X Account Session** (`critical`) — raised while `sessions.json` holds no sessions. Cleared by adding a session; returns if every session is later removed.
-- **Manage Access** (`critical`) — raised while `store.json` holds no access choice, which is from install until Manage Access first runs. A server updated from an earlier release already has one. Cleared by running Manage Access either way; it doesn't return unless the choice is removed from `store.json`.
+- **Manage Access** (`critical`) — raised while `store.json` holds no access choice, which is from install until Manage Access first runs. Cleared by running Manage Access either way; it doesn't return unless the choice is removed from `store.json`.
 - **Set Primary URL** (`important`) — raised while no primary URL is stored, from install on, and whenever the stored URL's hostname is not one of the service's addresses: a domain removed, or a backup restored onto a server whose addresses differ. An IP address counts as gone while its network link is down. Cleared when Set Primary URL runs, and by itself as soon as the stored URL's hostname is among the addresses again; it returns whenever the URL goes missing again. While it is up, Nitter keeps running and links to the preferred address.
 
 ---
@@ -162,7 +160,7 @@ The volume is restored before the service starts; nothing has to be rebuilt afte
 
 ```yaml
 package_id: nitter
-images: # never a tag
+images:
   - zedeus/nitter
   - valkey/valkey
 architectures: [x86_64, aarch64]
