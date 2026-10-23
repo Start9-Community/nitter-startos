@@ -1,26 +1,6 @@
-import { T } from '@start9labs/start-sdk'
-import { nitterConf } from '../fileModels/nitter.conf'
+import { storeJson } from '../fileModels/store.json'
 import { i18n } from '../i18n'
 import { sdk } from '../sdk'
-
-export const readPrimaryUrl = nitterConf.read(
-  ({ Server }) =>
-    Server.hostname &&
-    `${Server.https ? 'https' : 'http'}://${Server.hostname}`,
-)
-
-export function writePrimaryUrl(
-  effects: T.Effects,
-  url: string,
-  options?: { allowWriteAfterConst?: boolean },
-) {
-  const { host, protocol } = new URL(url)
-  return nitterConf.merge(
-    effects,
-    { Server: { hostname: host, https: protocol === 'https:' } },
-    options,
-  )
-}
 
 export const primaryUrl = sdk.setupPrimaryUrl({
   id: 'set-primary-url',
@@ -37,7 +17,6 @@ export const primaryUrl = sdk.setupPrimaryUrl({
     visibility: 'enabled',
   },
   field: { name: i18n('URL'), description: null },
-  get: readPrimaryUrl,
-  set: writePrimaryUrl,
-  fallback: false,
+  get: storeJson.read((s) => s.primaryUrl),
+  set: (effects, url) => storeJson.merge(effects, { primaryUrl: url }),
 })

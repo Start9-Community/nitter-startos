@@ -1,21 +1,13 @@
 import { FileHelper, z } from '@start9labs/start-sdk'
 import { sdk } from '../sdk'
 
-/**
- * StartOS-only settings with no upstream config file. Basic Auth is enforced
- * by the bundled Caddy proxy; credentials are kept in plaintext here so the
- * configure/reset actions can re-display them (main.ts bcrypt-hashes the
- * password into the Caddyfile at startup).
- */
-
-const basicAuthShape = z.looseObject({
-  enabled: z.boolean().catch(false),
-  username: z.string().nullable().catch(null),
-  password: z.string().nullable().catch(null),
-})
-
 const shape = z.looseObject({
-  basicAuth: basicAuthShape.catch(() => basicAuthShape.parse({})),
+  // unset until the owner chooses in Manage Access
+  access: z.enum(['private', 'public']).optional().catch(undefined),
+  // cleartext, because StartOS's proxy checks the login against it
+  password: z.string().optional().catch(undefined),
+  primaryUrl: z.string().optional().catch(undefined),
+  reattachTorOnions: z.boolean().catch(false),
 })
 
 export const storeJson = FileHelper.json(

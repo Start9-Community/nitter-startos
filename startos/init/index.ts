@@ -7,7 +7,8 @@ import { restoreInit } from '../backups'
 import { seedFiles } from './seedFiles'
 import { taskSessions } from './taskSessions'
 import { syncPrimaryUrl, taskPrimaryUrl } from './taskPrimaryUrl'
-import { taskBasicAuth } from './taskBasicAuth'
+import { taskAccess } from './taskAccess'
+import { reattachTorOnions } from './reattachTorOnions'
 
 export const init = sdk.setupInit(
   restoreInit,
@@ -17,9 +18,10 @@ export const init = sdk.setupInit(
   actions,
   dependencies,
   taskSessions,
-  syncPrimaryUrl,
   taskPrimaryUrl,
-  taskBasicAuth,
+  syncPrimaryUrl,
+  taskAccess,
+  reattachTorOnions,
 )
 
 export const uninit = sdk.setupUninit(versionGraph)

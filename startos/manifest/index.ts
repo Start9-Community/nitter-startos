@@ -23,11 +23,7 @@ export const manifest = setupManifest({
       arch: ['x86_64', 'aarch64'],
     },
     valkey: {
-      source: { dockerTag: 'valkey/valkey:8-alpine' },
-      arch: ['x86_64', 'aarch64'],
-    },
-    caddy: {
-      source: { dockerTag: 'caddy:2-alpine' },
+      source: { dockerTag: 'valkey/valkey:9-alpine' },
       arch: ['x86_64', 'aarch64'],
     },
   },

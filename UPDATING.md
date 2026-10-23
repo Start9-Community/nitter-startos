@@ -22,4 +22,4 @@ Pick the newest full-commit-hash tag (do not pin `latest` — it moves). Confirm
 3. Check the upstream diff for changes to `nitter.example.conf` or `src/config.nim` — new/removed config keys must be reflected in `startos/fileModels/nitter.conf.ts`.
 4. Check `src/auth.nim` and the [session tokens wiki page](https://github.com/zedeus/nitter/wiki/Creating-session-tokens) for changes to the `sessions.jsonl` format (currently `{"kind":"cookie","auth_token":...,"ct0":...}` per line) — the add-session action and `main.ts` renderer must match.
 
-The Valkey sidecar (`valkey/valkey:8-alpine`) tracks its own major tag and rarely needs attention.
+The Valkey sidecar (`valkey/valkey:9-alpine`) tracks its own major tag and rarely needs attention.

@@ -1,5 +1,6 @@
 import { FileHelper, utils, z } from '@start9labs/start-sdk'
 import { sdk } from '../sdk'
+import { uiPort } from '../utils'
 
 /**
  * nitter.conf is Nim parsecfg format: INI-style sections where string values
@@ -10,11 +11,11 @@ import { sdk } from '../sdk'
  */
 
 const serverShape = z.looseObject({
-  // empty until the primary URL watcher seeds it on first init
+  // rewritten at every init from primaryUrl.bestUsable
   hostname: z.string().catch(''),
   title: z.string().catch('Nitter'),
   address: z.literal('0.0.0.0').catch('0.0.0.0'),
-  port: z.literal(8080).catch(8080),
+  port: z.literal(uiPort).catch(uiPort),
   https: z.boolean().catch(false),
   httpMaxConnections: z.number().catch(100),
   staticDir: z.literal('./public').catch('./public'),

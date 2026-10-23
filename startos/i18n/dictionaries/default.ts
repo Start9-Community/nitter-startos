@@ -27,48 +27,42 @@ const dict = {
 
   // actions/removeSessions.ts
   'Sessions to remove': 18,
-  'Sessions are labeled by username when provided, otherwise by the first characters of their auth_token.': 19,
-  'Remove X Account Sessions': 20,
-  'Remove stored X account sessions, e.g. after revoking a session or deleting the account.': 21,
-  'Nitter cannot fetch any data without at least one session.': 22,
-  'Sessions removed': 23,
-  'The selected sessions were removed.': 24,
-  'All sessions were removed. Add a new session so Nitter can fetch data.': 25,
+  'Sessions are labeled by username when provided, otherwise by their position in the list.': 19,
+  'Session ${number}': 20,
+  'Remove X Account Sessions': 21,
+  'Remove stored X account sessions, e.g. after revoking a session or deleting the account.': 22,
+  'Nitter cannot fetch any data without at least one session.': 23,
+  'Sessions removed': 24,
+  'The selected sessions were removed.': 25,
+  'All sessions were removed. Add a new session so Nitter can fetch data.': 26,
 
   // actions/setPrimaryUrl.ts
-  URL: 26,
-  'Set Primary URL': 27,
-  'Choose which of your Nitter URLs is used for generating links, such as RSS feed and canonical URLs.': 28,
+  URL: 27,
+  'Set Primary URL': 28,
+  'Choose which of your Nitter URLs is used for generating links, such as RSS feed and canonical URLs.': 29,
+
+  // actions/manageAccess.ts
+  Access: 30,
+  "- Private: Nitter asks for a username and password, in your browser and in RSS readers\n- Public: anyone who can reach one of Nitter's addresses can use it, and every page they open is fetched with your X sessions": 31,
+  'Private (require login)': 32,
+  'Generate a new password': 33,
+  'Replace the current password. The old one stops working, including in RSS readers. A password is always generated the first time Nitter is made private.': 34,
+  Public: 35,
+  'Manage Access': 36,
+  'Make Nitter private, so it asks for a username and password, or public. The username is always "admin".': 37,
+  'Nitter is public': 38,
+  "Anyone who can reach one of Nitter's addresses can use it without a login.": 39,
+  'Login required': 40,
+  'Nitter asks for a username and password. Your password has not changed.': 41,
+  'Use these credentials when your browser or RSS reader asks for a login. This is the only time the password is shown.': 42,
+  Username: 43,
+  Password: 44,
 
   // init/taskSessions.ts
-  'Nitter requires session cookies from a real X (Twitter) account to fetch data. Add a session to start the service.': 29,
+  'Nitter requires session cookies from a real X (Twitter) account to fetch data. Add a session to start the service.': 45,
 
-  // init/taskPrimaryUrl.ts
-  'Primary URL removed. Select a new primary URL.': 30,
-
-  // main.ts (caddy)
-  'Caddy is ready': 31,
-  'Caddy is not ready': 32,
-
-  // actions/configureBasicAuth.ts
-  'Enable Basic Auth': 33,
-  'Require a username and password to access the Nitter web interface. Applies to everyone, including RSS readers.': 34,
-  'Configure Basic Auth': 35,
-  'Protect the Nitter web interface with a generated username and password, or turn the protection off.': 36,
-  'Basic Auth disabled': 37,
-  'The web interface no longer requires a login. The service restarts to apply changes.': 38,
-  'Basic Auth enabled': 39,
-  'Use these credentials when prompted for a login. The service restarts to apply changes.': 40,
-  Username: 41,
-  Password: 42,
-
-  // actions/resetBasicAuthPassword.ts
-  'Reset Basic Auth Password': 43,
-  'Generate a new random password for Basic Auth and display it. The service restarts to apply it.': 44,
-  'Basic Auth Credentials': 45,
-
-  // init/taskBasicAuth.ts
-  'Decide whether to protect the Nitter web interface with a username and password (Basic Auth).': 46,
+  // init/taskAccess.ts
+  'Choose whether Nitter asks for a username and password. Private is the default.': 46,
 } as const
 
 /**
