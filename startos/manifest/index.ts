@@ -5,7 +5,7 @@ export const manifest = setupManifest({
   id: 'nitter',
   title: 'Nitter',
   license: 'AGPL-3.0',
-  packageRepo: 'https://github.com/stupleb/nitter-startos',
+  packageRepo: 'https://github.com/Start9-Community/nitter-startos',
   upstreamRepo: 'https://github.com/zedeus/nitter',
   marketingUrl: 'https://github.com/zedeus/nitter',
   donationUrl: 'https://liberapay.com/zedeus',
