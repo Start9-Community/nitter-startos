@@ -49,7 +49,6 @@ While Nitter is private, RSS readers need the username and password too. Most su
 Run **Manage Access** at any time to switch between private and public.
 
 - Choosing **Private** again keeps your current password. Turn on **Generate a new password** to replace it; the old one then stops working everywhere, including in RSS readers.
-- **Tor addresses:** an onion address added without SSL skips the login, and that is Tor's default for a web interface. To keep a private Nitter private over Tor, turn on SSL when you add the onion address. Tor Browser then shows a certificate warning.
 
 ## Display Preferences
 

@@ -78,7 +78,7 @@ None. Nitter needs an X account session (supplied through an action), not anothe
 
 ## Network Access and Interfaces
 
-One interface, served by Nitter itself. StartOS's reverse proxy serves its HTTPS addresses and, while access is private, asks for the login there before a request reaches Nitter.
+One interface, served by Nitter itself. StartOS's reverse proxy serves it and, while access is private, asks for the login on every address, plain HTTP and onion included, before a request reaches Nitter.
 
 | Interface | ID   | Type | Port | Protocol | Purpose                                                 |
 | --------- | ---- | ---- | ---- | -------- | ------------------------------------------------------- |
@@ -150,9 +150,8 @@ The volume is restored before the service starts; nothing has to be rebuilt afte
 4. **`enableDebug` is held off.** The `/.sessions` debug endpoint is unavailable.
 5. **No proxy support is wired up.** Upstream's `proxy` / `apiProxy` options are not exposed.
 6. **Links use one URL.** Nitter builds absolute RSS and canonical links from the link URL, regardless of which address you are browsing from.
-7. **Private access is a StartOS addition.** Upstream has no login. StartOS's reverse proxy asks for it on every request to the HTTPS addresses, RSS feeds included, so RSS readers need the credentials (most support Basic Auth or `user:pass@host` URLs).
-8. **The plain-HTTP address skips the login.** It goes straight to Nitter. StartOS offers it to other services on the same server and on a gateway set secure with `start-cli net gateway set-secure`. Tor is one of those services: an `.onion` address added without SSL, which is Tor's default for a web interface, serves Nitter with no login even while access is private. Adding the `.onion` address with SSL on keeps the login, and Tor Browser then shows a certificate warning.
-9. **Public access spends your X sessions.** Every page a visitor opens is fetched from X with the sessions you added, so heavy use by others can rate-limit or restrict those accounts.
+7. **Private access is a StartOS addition.** Upstream has no login. StartOS's reverse proxy asks for it on every request to every address, RSS feeds included, so RSS readers need the credentials (most support Basic Auth or `user:pass@host` URLs), and so does any other service on the server that reaches Nitter.
+8. **Public access spends your X sessions.** Every page a visitor opens is fetched from X with the sessions you added, so heavy use by others can rate-limit or restrict those accounts.
 
 ---
 
